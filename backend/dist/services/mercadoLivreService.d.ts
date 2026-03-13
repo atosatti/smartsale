@@ -95,7 +95,12 @@ declare class MercadoLivreService {
     private secretKey;
     constructor();
     /**
-     * Obter token OAuth do usuário
+     * ✨ NOVO: Renovar token automaticamente se expirou/está expirando
+     * Verifica expires_at e usa refresh_token se disponível
+     */
+    private refreshTokenIfNeeded;
+    /**
+     * Obter token OAuth do usuário (com auto-refresh)
      */
     private getUserOAuthToken;
     searchProducts(params: MercadoLivreSearchParams): Promise<Product[]>;
@@ -122,6 +127,12 @@ declare class MercadoLivreService {
      * - sort_allowed: true (pode ordenar)
      */
     getSellerRestrictions(sellerId: number, userToken?: string): Promise<any>;
+    /**
+     * Obter informações de um vendedor específico
+     * GET /users/:userId
+     * Retorna: nickname, country_id, registration_date, car_dealer, real_estate_agency, tags, points, etc
+     */
+    getSellerInfo(sellerId: number): Promise<any>;
     /**
      * ✨ NOVO: Buscar múltiplos itens em 1 requisição (Multiget)
      * GET /items?ids=$ID1,$ID2,...&attributes=$FIELD1,$FIELD2

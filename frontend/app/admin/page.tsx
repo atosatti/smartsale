@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { useThemeStore } from '@/store/themeStore';
-import MetronicLayout from '@/components/MetronicLayout';
 import api from '@/lib/api';
 import {
   Users as UsersIcon,
@@ -175,8 +174,7 @@ export default function AdminDashboard() {
   const planData = stats.users.byPlan || [];
 
   return (
-    <MetronicLayout>
-      <div className="space-y-8">
+    <div className="space-y-8">
       {/* Page Title */}
       <div>
         <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Dashboard Admin</h1>
@@ -292,6 +290,5 @@ export default function AdminDashboard() {
         </a>
       </div>
     </div>
-    </MetronicLayout>
   );
 }

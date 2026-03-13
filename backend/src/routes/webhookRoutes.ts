@@ -3,7 +3,6 @@ import Stripe from 'stripe';
 import mysql from 'mysql2/promise';
 import pool from '../config/database.js';
 import { sendSubscriptionConfirmation, sendSubscriptionRenewal } from '../utils/emailNotifications.js';
-import { sendSubscriptionConfirmation, sendSubscriptionRenewal } from '../utils/emailNotifications.js';
 
 const router = Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
@@ -177,7 +176,7 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     );
 
     // 📧 Se é uma renovação (não é a primeira), enviar recibo com detalhes
-    if (invoice.billing_reason === 'subscription_cycle' || invoice.attempt > 1) {
+    if (invoice.billing_reason === 'subscription_cycle' || invoice.attempted) {
       try {
         const planName = invoice.lines.data[0]?.description || 'Plan';
         const planPrice = (invoice.lines.data[0]?.price?.unit_amount || 0) / 100;

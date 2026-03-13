@@ -54,6 +54,6 @@ router.post('/multiget-users', getUsersMulti);
  * Busca pública com filtros e ordenação
  * ⚠️ Se autenticado: verifica se assinatura está ativa
  */
-router.get('/public', optionalAuthMiddleware, subscriptionActiveMiddleware, searchPublic);
+router.get('/public', optionalAuthMiddleware as any, subscriptionActiveMiddleware as any, searchPublic);
 
 export default router;

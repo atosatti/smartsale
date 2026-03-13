@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { verifyToken } from '../utils/jwt.js';
 
 export interface AuthenticatedRequest extends Request {
@@ -9,7 +9,7 @@ export interface AuthenticatedRequest extends Request {
 }
 
 export const authMiddleware = (
-  req: AuthenticatedRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
@@ -28,7 +28,7 @@ export const authMiddleware = (
  * Tenta extrair o usuário do token, mas não bloqueia se não houver
  */
 export const optionalAuthMiddleware = (
-  req: AuthenticatedRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
@@ -49,7 +49,7 @@ export const optionalAuthMiddleware = (
  * Bloqueia buscas se assinatura foi cancelada e o período expirou
  */
 export const subscriptionActiveMiddleware = async (
-  req: AuthenticatedRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {

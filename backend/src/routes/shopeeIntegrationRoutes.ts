@@ -11,22 +11,22 @@ const router = express.Router();
 
 // Verificar status de conexão
 // GET /api/integrations/shopee/status
-router.get('/status', authMiddleware, shopeeAuthController.getShopeeStatus);
+router.get('/status', authMiddleware as any, shopeeAuthController.getShopeeStatus as any);
 
 // Listar lojas autorizadas (admin)
 // GET /api/integrations/shopee/authorized-shops
-router.get('/authorized-shops', authMiddleware, shopeeAuthController.getAuthorizedShops);
+router.get('/authorized-shops', authMiddleware as any, shopeeAuthController.getAuthorizedShops as any);
 
 // Desconectar uma loja
 // POST /api/integrations/shopee/disconnect
-router.post('/disconnect', authMiddleware, shopeeAuthController.disconnectShopee);
+router.post('/disconnect', authMiddleware as any, shopeeAuthController.disconnectShopee as any);
 
 // Revogar acesso de uma loja (admin)
 // DELETE /api/integrations/shopee/revoke/:shopId
-router.delete('/revoke/:shopId', authMiddleware, shopeeAuthController.revokeShopeeAccess);
+router.delete('/revoke/:shopId', authMiddleware as any, shopeeAuthController.revokeShopeeAccess as any);
 
 // Forçar refresh de token
 // POST /api/integrations/shopee/refresh-token
-router.post('/refresh-token', authMiddleware, shopeeAuthController.forceTokenRefresh);
+router.post('/refresh-token', authMiddleware as any, shopeeAuthController.forceTokenRefresh as any);
 
 export default router;

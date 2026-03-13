@@ -17,6 +17,9 @@ import oauthRoutes from './routes/oauthRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import integrationsRoutes from './routes/integrationsRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
+import shopeeRoutes from './routes/shopeeRoutes.js';
+import shopeeOAuthRoutes from './routes/shopeeOAuthRoutes.js';
+import shopeeIntegrationRoutes from './routes/shopeeIntegrationRoutes.js';
 import { errorHandler } from './middleware/auth.js';
 import { runMigrations } from './utils/runMigrations.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -99,14 +102,17 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/oauth', oauthRoutes);
+app.use('/api/oauth/shopee', shopeeOAuthRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/integrations', integrationsRoutes);
+app.use('/api/integrations/shopee', shopeeIntegrationRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/reports', reportRoutes);
 app.use('/api/mercado-livre', mercadoLivreRoutes);
 app.use('/api/ml-search', mlSearchRoutes);
+app.use('/api/shopee', shopeeRoutes);
 // Backwards compatibility routes (without /api prefix)
 app.use('/auth', authRoutes);
 app.use('/oauth', oauthRoutes);

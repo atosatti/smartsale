@@ -137,7 +137,7 @@ async function handleInvoicePaymentSucceeded(invoice) {
         await connection.execute(`UPDATE invoices SET status = 'paid', paid_at = NOW() 
        WHERE stripe_invoice_id = ?`, [invoice.id]);
         // 📧 Se é uma renovação (não é a primeira), enviar recibo com detalhes
-        if (invoice.billing_reason === 'subscription_cycle' || invoice.attempt > 1) {
+        if (invoice.billing_reason === 'subscription_cycle' || invoice.attempted) {
             try {
                 const planName = invoice.lines.data[0]?.description || 'Plan';
                 const planPrice = (invoice.lines.data[0]?.price?.unit_amount || 0) / 100;

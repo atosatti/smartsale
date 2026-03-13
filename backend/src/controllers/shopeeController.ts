@@ -1,7 +1,8 @@
 import shopeeService from '../services/shopeeService.js';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AuthenticatedRequest } from '../middleware/auth.js';
 
-export const searchProducts = async (req: Request, res: Response) => {
+export const searchProducts = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { query, limit = 20, offset = 0, sort } = req.body;
     if (!query) return res.status(400).json({ error: 'Search query is required' });
@@ -14,7 +15,7 @@ export const searchProducts = async (req: Request, res: Response) => {
   }
 };
 
-export const getProductDetails = async (req: Request, res: Response) => {
+export const getProductDetails = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { productId } = req.params;
     if (!productId) return res.status(400).json({ error: 'Product ID is required' });
@@ -26,7 +27,7 @@ export const getProductDetails = async (req: Request, res: Response) => {
   }
 };
 
-export const compareProducts = async (req: Request, res: Response) => {
+export const compareProducts = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { productIds } = req.body;
     if (!productIds || !Array.isArray(productIds) || productIds.length === 0) return res.status(400).json({ error: 'Product IDs array is required' });
@@ -38,7 +39,7 @@ export const compareProducts = async (req: Request, res: Response) => {
   }
 };
 
-export const getPriceHistory = async (req: Request, res: Response) => {
+export const getPriceHistory = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { productId } = req.params;
     if (!productId) return res.status(400).json({ error: 'Product ID is required' });
@@ -50,7 +51,7 @@ export const getPriceHistory = async (req: Request, res: Response) => {
   }
 };
 
-export const testConnection = async (req: Request, res: Response) => {
+export const testConnection = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const result = await shopeeService.testAPIConnection();
     res.json(result);

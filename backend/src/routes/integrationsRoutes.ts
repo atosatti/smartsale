@@ -14,24 +14,24 @@ import pool from '../config/database.js';
 const router = Router();
 
 // Aplicar middleware de autenticação e admin a todas as rotas
-router.use(authMiddleware);
-router.use(adminMiddleware);
+router.use(authMiddleware as any);
+router.use(adminMiddleware as any);
 
 // Rotas de status
-router.get('/status', getIntegrationsStatus);
-router.get('/mercado-livre/status', getMercadoLivreStatus);
-router.get('/mercado-livre/validate', validateMercadoLivreConnection);
+router.get('/status', getIntegrationsStatus as any);
+router.get('/mercado-livre/status', getMercadoLivreStatus as any);
+router.get('/mercado-livre/validate', validateMercadoLivreConnection as any);
 
 // Rotas de configuração
-router.post('/mercado-livre/save-token', saveMercadoLivreToken);
-router.post('/mercado-livre/refresh-token', refreshMercadoLivreToken);
-router.post('/mercado-livre/disconnect', disconnectMercadoLivre);
+router.post('/mercado-livre/save-token', saveMercadoLivreToken as any);
+router.post('/mercado-livre/refresh-token', refreshMercadoLivreToken as any);
+router.post('/mercado-livre/disconnect', disconnectMercadoLivre as any);
 
 // Rotas de gerenciamento de aplicativo
-router.get('/mercado-livre/app-details', getMercadoLivreAppDetails);
-router.get('/mercado-livre/user-apps/:userId', getMercadoLivreUserApps);
-router.delete('/mercado-livre/revoke/:userId/:appId', revokeMercadoLivreAuthorization);
-router.get('/mercado-livre/metrics', getMercadoLivreMetrics);
+router.get('/mercado-livre/app-details', getMercadoLivreAppDetails as any);
+router.get('/mercado-livre/user-apps/:userId', getMercadoLivreUserApps as any);
+router.delete('/mercado-livre/revoke/:userId/:appId', revokeMercadoLivreAuthorization as any);
+router.get('/mercado-livre/metrics', getMercadoLivreMetrics as any);
 
 /**
  * Obter token ativo do banco de dados
@@ -113,7 +113,7 @@ async function getMercadoLivreAppDetails(req: any, res: Response) {try {
 
       if (grantsResponse.ok) {
         try {
-          const grantsData = await grantsResponse.json();
+          const grantsData = await grantsResponse.json() as any;
           grants = grantsData.grants || [];
 
           // Processar status do grant

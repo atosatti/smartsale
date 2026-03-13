@@ -44,7 +44,6 @@ export const getMercadoLivreStatus = async (req: AuthenticatedRequest, res: Resp
     const token = await oauthTokenService.getActiveToken('mercado-livre');
 
     const isExpired = token ? oauthTokenService.isTokenExpired(token) : false;
-    const hasTestUser = !!(token?.test_user_id && token?.test_nickname);
 
     res.status(200).json({
       connected: !!token && token.is_active,
@@ -54,8 +53,6 @@ export const getMercadoLivreStatus = async (req: AuthenticatedRequest, res: Resp
       providerUserId: token?.provider_user_id,
       connectedSince: token?.created_at,
       hasRefreshToken: !!token?.refresh_token,
-      hasTestUser,
-      testUserNickname: token?.test_nickname || null,
       message: token ? 'Conectada' : 'Não conectada'
     });
   } catch (error) {

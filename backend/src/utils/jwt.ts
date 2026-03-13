@@ -1,17 +1,17 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
-const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
+const JWT_SECRET: string = process.env.JWT_SECRET || 'your_jwt_secret_key';
+const JWT_EXPIRE: string = process.env.JWT_EXPIRE || '7d';
 
 export const generateToken = (userId: number, email: string): string => {
   return jwt.sign(
     { id: userId, email },
-    JWT_SECRET as string,
-    { expiresIn: JWT_EXPIRE as string | number }
-  ) as string;
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRE } as any
+  );
 };
 
 export const verifyToken = (token: string) => {

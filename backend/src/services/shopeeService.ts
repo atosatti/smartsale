@@ -45,8 +45,8 @@ class ShopeeService {
       const items = (response.data?.items || []).map((it: any) => this.mapProduct(it));
       this.cache.set(cacheKey, { data: items, timestamp: Date.now() });
       return items;
-    } catch (error) {
-      console.error('[Shopee Search] Erro ao buscar produtos:', error?.message || error);
+    } catch (error: any) {
+      console.error('[Shopee Search] Erro ao buscar produtos:', (error as Error)?.message || error);
       // Fallback mock para desenvolvimento
       const mockProducts = Array.from({ length: Math.min(15, params.limit || 15) }).map((_, i) => ({
         id: `SH_MOCK_${params.query}_${i + 1}`,
@@ -75,8 +75,8 @@ class ShopeeService {
       const details = this.mapProductDetails(response.data || {});
       this.cache.set(cacheKey, { data: details, timestamp: Date.now() });
       return details;
-    } catch (error) {
-      console.error('[Shopee Details] Erro ao obter detalhes:', error?.message || error);
+    } catch (error: any) {
+      console.error('[Shopee Details] Erro ao obter detalhes:', (error as Error)?.message || error);
       // Fallback simples
       return {
         id: productId,
@@ -103,8 +103,8 @@ class ShopeeService {
           avgPrice: valid.reduce((s: any, p: any) => s + (p.price || 0), 0) / Math.max(1, valid.length),
         }
       };
-    } catch (error) {
-      console.error('[Shopee Compare] Erro:', error?.message || error);
+    } catch (error: any) {
+      console.error('[Shopee Compare] Erro:', (error as Error)?.message || error);
       return { success: false, data: [], comparison: {} };
     }
   }
@@ -121,7 +121,7 @@ class ShopeeService {
     try {
       const response = await this.apiClient.get('/search/search_items', { params: { keyword: 'notebook', limit: 1 } });
       return { success: true, message: 'Conexão Shopee OK', data: { status: response.status, items: response.data?.items?.length || 0 } };
-    } catch (error) {
+    } catch (error: any) {
       console.error('[Shopee Test] Erro:', error?.message || error);
       return { success: false, message: `Erro: ${error?.message || 'unknown'}`, data: null };
     }

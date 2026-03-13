@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+import { Response, NextFunction, RequestHandler } from 'express';
 import { AuthenticatedRequest } from './auth.js';
 import pool from '../config/database.js';
 
@@ -7,7 +7,7 @@ import pool from '../config/database.js';
  * Deve ser utilizado após o authMiddleware
  */
 export const adminMiddleware = async (
-  req: AuthenticatedRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {

@@ -123,4 +123,88 @@ export interface AppSettingAuditLog {
     user_agent?: string;
     created_at: Date;
 }
+export interface ShopeeOAuthToken {
+    id?: number;
+    shop_id: string;
+    user_id: number;
+    access_token: string;
+    refresh_token: string;
+    token_expires_at: Date;
+    refresh_token_expires_at?: Date;
+    shop_name?: string;
+    shop_rating?: number;
+    shop_follower_count?: number;
+    shop_status?: 'normal' | 'banned' | 'suspended';
+    is_preferred_seller?: boolean;
+    is_verified?: boolean;
+    last_refreshed_at?: Date;
+    is_active: boolean;
+    created_at: Date;
+    updated_at: Date;
+}
+export interface ShopeeProductInfo {
+    item_id: string;
+    shop_id: string;
+    item_name: string;
+    description: string;
+    price: number;
+    discount_price?: number;
+    currency: string;
+    stock_count: number;
+    sold_count?: number;
+    rating: number;
+    review_count: number;
+    image_url?: string;
+    images?: string[];
+    category_id: string;
+    brand?: string;
+    status: 'NORMAL' | 'BANNED' | 'DELETED';
+    condition?: 'NEW' | 'USED';
+    weight?: number;
+    dimensions?: {
+        height: number;
+        length: number;
+        width: number;
+    };
+}
+export interface ShopeeProductVariation {
+    model_id: string;
+    item_id: string;
+    shop_id: string;
+    price: number;
+    discount_price?: number;
+    stock: number;
+    sku: string;
+    tier_index?: number[];
+    tier_variation?: Array<{
+        name: string;
+        option: string;
+    }>;
+}
+export interface ShopeeShopInfo {
+    shop_id: string;
+    shop_name: string;
+    shop_rating: number;
+    response_rate: number;
+    response_time?: string;
+    follower_count: number;
+    shop_status: 'NORMAL' | 'BANNED' | 'SUSPENDED';
+    is_preferred_seller: boolean;
+    is_verified: boolean;
+    is_shopee_mall: boolean;
+    region?: string;
+    location?: string;
+}
+export interface ShopeeReview {
+    comment_id: string;
+    item_id: string;
+    shop_id: string;
+    author?: string;
+    rating: number;
+    comment_text: string;
+    images?: string[];
+    reply_time?: Date;
+    reply_text?: string;
+    created_at: Date;
+}
 //# sourceMappingURL=types.d.ts.map

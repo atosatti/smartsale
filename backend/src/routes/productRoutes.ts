@@ -23,31 +23,31 @@ const router = Router();
  * Opcional: Authorization header para usar token OAuth do usuário
  * ⚠️ Se autenticado: verifica se assinatura está ativa
  */
-router.get('/search', optionalAuthMiddleware, subscriptionActiveMiddleware, searchProducts);
+router.get('/search', optionalAuthMiddleware as any, subscriptionActiveMiddleware as any, searchProducts as any);
 
 /**
  * GET /api/products/:productId
  * Obtém detalhes completos de um produto específico
  */
-router.get('/:productId', getProductDetails);
+router.get('/:productId', getProductDetails as any);
 
 /**
  * GET /api/products/:productId/competitors
  * Encontra produtos concorrentes (mesmo segmento/categoria)
  */
-router.get('/:productId/competitors', findCompetitors);
+router.get('/:productId/competitors', findCompetitors as any);
 
 /**
  * GET /api/products/seller/:sellerId
  * Obtém informações de reputação e feedback do vendedor
  */
-router.get('/seller/:sellerId', getSellerInfo);
+router.get('/seller/:sellerId', getSellerInfo as any);
 
 /**
  * GET /api/products/category/:categoryId?limit=50
  * Busca produtos por categoria
  */
-router.get('/category/:categoryId', searchByCategory);
+router.get('/category/:categoryId', searchByCategory as any);
 
 /**
  * Rotas autenticadas (requerem JWT token)
@@ -58,12 +58,12 @@ router.get('/category/:categoryId', searchByCategory);
  * Salva um produto na base de dados do usuário para análise posterior
  * Body: { name, description, productId, price, seller }
  */
-router.post('/save', authMiddleware, saveProduct);
+router.post('/save', authMiddleware as any, saveProduct as any);
 
 /**
  * GET /api/products/saved
  * Obtém todos os produtos salvos pelo usuário autenticado
  */
-router.get('/saved', authMiddleware, getSavedProducts);
+router.get('/saved', authMiddleware as any, getSavedProducts as any);
 
 export default router;

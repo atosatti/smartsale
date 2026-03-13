@@ -5,10 +5,10 @@ import shopeeService from '../services/shopeeService.js';
 
 const router = Router();
 
-router.post('/search', authMiddleware, subscriptionActiveMiddleware, searchProducts);
-router.get('/product/:productId', authMiddleware, getProductDetails);
-router.post('/compare', authMiddleware, compareProducts);
-router.get('/price-history/:productId', authMiddleware, getPriceHistory);
+router.post('/search', authMiddleware as any, subscriptionActiveMiddleware as any, searchProducts as any);
+router.get('/product/:productId', authMiddleware as any, getProductDetails as any);
+router.post('/compare', authMiddleware as any, compareProducts as any);
+router.get('/price-history/:productId', authMiddleware as any, getPriceHistory as any);
 
 // Debug/test endpoint
 router.get('/test', async (req, res) => {

@@ -115,3 +115,14 @@ npm run dev
 ## Contato para Dúvidas
 
 Consulte o README.md para informações mais detalhadas sobre o projeto.
+
+## Fluxo para o Github Copilot
+Local Development
+    ↓
+staging (branch de testes)
+    ↓
+main (produção)
+
+## Documentação
+Toda a documentação criada deve ser clara, concisa e atualizada. Use comentários no código para explicar lógica complexa. Mantenha o README.md atualizado com instruções de configuração e uso.
+Todo o novo documento deve ser enviado e catalogado na pasta Docs

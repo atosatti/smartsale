@@ -225,10 +225,104 @@ class MercadoLivreService {
   }
 
   /**
-   * Obter token OAuth do usuário
+   * ✨ NOVO: Renovar token automaticamente se expirou/está expirando
+   * Verifica expires_at e usa refresh_token se disponível
+   */
+  private async refreshTokenIfNeeded(userId: number): Promise<string | null> {
+    try {
+      console.log(`[ML Service] Verificando expiração de token para user ${userId}...`);
+      
+      const [rows]: any = await db.query(
+        'SELECT mercado_livre_token, mercado_livre_token_expires_at, mercado_livre_refresh_token FROM users WHERE id = ?',
+        [userId]
+      );
+
+      const user = rows?.[0];
+      if (!user || !user.mercado_livre_token) {
+        console.log(`[ML Service] Sem token para user ${userId}`);
+        return null;
+      }
+
+      // Verificar se expirou (renovar 5 min antes da expiração)
+      const expiresAt = new Date(user.mercado_livre_token_expires_at);
+      const now = new Date();
+      const timeToExpire = expiresAt.getTime() - now.getTime();
+      const fiveMinutes = 5 * 60 * 1000;
+
+      console.log(`[ML Service] Token expira em: ${expiresAt.toISOString()}`);
+      console.log(`[ML Service] Tempo até expiração: ${Math.round(timeToExpire / 1000)}s`);
+
+      // Se vencer em menos de 5 min, renovar
+      if (timeToExpire < fiveMinutes) {
+        console.log(`[ML Service] ⚠️ Token expirando em breve, iniciando renovação...`);
+
+        if (!user.mercado_livre_refresh_token) {
+          console.error(`[ML Service] ❌ Refresh token não disponível! Usuário precisa reautenticar.`);
+          return user.mercado_livre_token; // Retornar token antigo (pode funcionar ainda)
+        }
+
+        try {
+          console.log(`[ML Service] Chamando OAuth endpoint para renovar...`);
+          
+          const response = await axios.post(
+            'https://api.mercadolibre.com/oauth/token',
+            {
+              grant_type: 'refresh_token',
+              client_id: this.appId,
+              client_secret: this.secretKey,
+              refresh_token: user.mercado_livre_refresh_token,
+            },
+            {
+              timeout: 10000,
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            }
+          );
+
+          const newToken = response.data.access_token;
+          const newRefreshToken = response.data.refresh_token;
+          const expiresIn = response.data.expires_in || 21600; // 6 horas padrão
+
+          const newExpiresAt = new Date(Date.now() + expiresIn * 1000);
+
+          // Salvar novo token no banco
+          console.log(`[ML Service] Salvando novo token no banco (expires in ${expiresIn}s)...`);
+          await db.query(
+            'UPDATE users SET mercado_livre_token = ?, mercado_livre_refresh_token = ?, mercado_livre_token_expires_at = ? WHERE id = ?',
+            [newToken, newRefreshToken, newExpiresAt, userId]
+          );
+
+          console.log(`[ML Service] ✅ Token renovado com sucesso! Novo expires_at: ${newExpiresAt.toISOString()}`);
+          return newToken;
+        } catch (error: any) {
+          console.error(`[ML Service] ❌ Erro ao renovar token:`, error.message);
+          if (error.response?.data) {
+            console.error(`[ML Service] Detalhes do erro:`, error.response.data);
+          }
+          // Retornar token antigo mesmo com falha na renovação
+          return user.mercado_livre_token;
+        }
+      } else {
+        console.log(`[ML Service] ✓ Token ainda válido`);
+        return user.mercado_livre_token;
+      }
+    } catch (error: any) {
+      console.error(`[ML Service] Erro ao verificar expiração:`, error.message);
+      return null;
+    }
+  }
+
+  /**
+   * Obter token OAuth do usuário (com auto-refresh)
    */
   private async getUserOAuthToken(userId: number): Promise<string | null> {
     try {
+      // 1️⃣ Primeiro, tentar renovar se necessário
+      const refreshedToken = await this.refreshTokenIfNeeded(userId);
+      if (refreshedToken) {
+        return refreshedToken;
+      }
+
+      // 2️⃣ Se refresh falhou, tentar obter token antigo
       const [rows]: any = await db.query(
         'SELECT mercado_livre_token, mercado_livre_test_token, mercado_livre_test_user_id FROM users WHERE id = ?',
         [userId]
@@ -236,18 +330,22 @@ class MercadoLivreService {
 
       if (rows && rows.length > 0) {
         // Preferir token de teste se disponível (para contornar bloqueios de ngrok)
-        if (rows[0].mercado_livre_test_token) {return rows[0].mercado_livre_test_token; // Retorna credenciais em base64
+        if (rows[0].mercado_livre_test_token) {
+          return rows[0].mercado_livre_test_token; // Retorna credenciais em base64
         }
         // Senão usar token principal
-        if (rows[0].mercado_livre_token) {return rows[0].mercado_livre_token;
+        if (rows[0].mercado_livre_token) {
+          return rows[0].mercado_livre_token;
         }
       }
       return null;
-    } catch (error: any) {      // Se a coluna não existe ainda, retornar null (a coluna será adicionada pela migração)
+    } catch (error: any) {
+      // Se a coluna não existe ainda, retornar null (a coluna será adicionada pela migração)
       if (error.code === 'ER_BAD_FIELD_ERROR') {
         console.warn('[ML Service] Coluna mercado_livre_token não existe ainda. Use: npm run migrate');
         return null;
-      }      console.error('[ML Service] Erro ao obter token OAuth:', error);
+      }
+      console.error('[ML Service] Erro ao obter token OAuth:', error);
       return null;
     }
   }
@@ -593,6 +691,33 @@ class MercadoLivreService {
     } catch (error: any) {
       console.error('[ML Restrictions] Erro ao obter restrições:', error.message);
       throw this.handleError(error, 'getSellerRestrictions');
+    }
+  }
+
+  /**
+   * Obter informações de um vendedor específico
+   * GET /users/:userId
+   * Retorna: nickname, country_id, registration_date, car_dealer, real_estate_agency, tags, points, etc
+   */
+  async getSellerInfo(sellerId: number): Promise<any> {
+    try {
+      const cacheKey = `seller_info:${sellerId}`;
+      
+      if (this.cache.has(cacheKey)) {
+        const cached = this.cache.get(cacheKey)!;
+        if (Date.now() - cached.timestamp < this.cacheTTL) {
+          return cached.data;
+        }
+      }
+
+      const response = await this.apiClient.get(`/users/${sellerId}`);
+      const result = this.mapSellerInfo(response.data);
+      
+      this.cache.set(cacheKey, { data: result, timestamp: Date.now() });
+      return result;
+    } catch (error: any) {
+      console.error('[ML SellerInfo] Erro ao obter informações do vendedor:', error.message);
+      throw this.handleError(error, 'getSellerInfo');
     }
   }
 
