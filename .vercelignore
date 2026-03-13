@@ -1,16 +1,8 @@
-# Ignore files that don't need to be deployed
-.git
-.github
-.gitignore
-node_modules
+# Ignore backend and docs
+backend/
+docs/
+scripts/
+.git/
+.github/
 *.md
-.env.example
-.env.local
-.env.test.local
-dist
-coverage
-.DS_Store
-*.log
-backend
-docs
-scripts
+node_modules/
