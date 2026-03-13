@@ -2,6 +2,7 @@
   "name": "smartsale-frontend",
   "version": "1.0.0",
   "description": "Frontend for SmartSale - E-commerce Product Search",
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
