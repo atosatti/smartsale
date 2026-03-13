@@ -4,7 +4,7 @@
   "description": "Frontend for SmartSale - E-commerce Product Search",
   "scripts": {
     "dev": "next dev",
-    "build": "cd ../backend && npm run build && cd ../frontend && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit"
