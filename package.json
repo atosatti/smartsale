@@ -12,5 +12,8 @@
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "start": "cd frontend && npm start"
+  },
+  "devDependencies": {
+    "next": "*"
   }
 }
