@@ -1,8 +1,8 @@
-# Ignore backend and docs
+# Ignore backend and docs - these are not needed for frontend build
 backend/
 docs/
 scripts/
 .git/
 .github/
 *.md
-node_modules/
+
