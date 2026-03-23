@@ -1,25 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  reactStrictMode: true,
-  swcMinify: true,
+  reactStrictMode: false,
+  swcMinify: false,
+  productionBrowserSourceMaps: false,
   typescript: {
     ignoreBuildErrors: true,
+    tsconfigPath: './tsconfig.json',
   },
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  experimental: {
-    optimizePackageImports: ['@mui/material'],
-  },
-  webpack: (config, { isServer }) => {
-    return config;
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
   },
   images: {
-    unoptimized: true, // Desabilitar otimização de imagens em desenvolvimento
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
