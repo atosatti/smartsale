@@ -1,12 +1,5 @@
 {
-  "version": 2,
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/.next",
-  "framework": "nextjs",
-  "functions": {
-    "frontend/.next/standalone/server.js": {
-      "maxDuration": 30,
-      "memory": 1024
-    }
-  }
+  "framework": "nextjs"
 }
