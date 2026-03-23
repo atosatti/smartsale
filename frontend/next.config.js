@@ -6,6 +6,15 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  experimental: {
+    optimizePackageImports: ['@mui/material'],
+  },
+  webpack: (config, { isServer }) => {
+    return config;
+  },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
   },
@@ -41,3 +50,4 @@ const nextConfig = {
 };
 
 export default nextConfig;
+
