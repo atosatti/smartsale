@@ -40,9 +40,9 @@ const allowedOrigins = [
   'http://localhost:3002',
   'http://localhost:3003',
   'https://localhost',
-  process.env.FRONTEND_URL || 'http://localhost:3000',
-  process.env.NGROK_URL // Add ngrok URL from environment
-].filter(Boolean);
+  process.env.FRONTEND_URL,
+  process.env.NGROK_URL,
+].filter(Boolean) as string[];
 
 app.use(
   cors({
@@ -50,8 +50,14 @@ app.use(
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
       
-      // Check if origin is in allowed list or matches ngrok pattern
-      if (allowedOrigins.includes(origin) || origin.includes('ngrok')) {
+      // Check if origin is in allowed list or matches dynamic patterns
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        origin.includes('ngrok') ||
+        origin.includes('vercel.app') ||
+        origin.includes('railway.app');
+
+      if (isAllowed) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
@@ -136,6 +142,9 @@ app.use('/oauth', oauthRoutes);
 // Health check
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'API is running' });
+});
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 // Debug endpoint
