@@ -77,7 +77,8 @@ export default function GoogleSignInButton({
 
   const handleGoogleLogin = () => {
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || apiUrl.replace(/\/api\/?$/, '');
       window.location.href = `${backendUrl}/api/auth/google/authorize`;
     } catch (error) {
       console.error('Erro ao iniciar login Google:', error);

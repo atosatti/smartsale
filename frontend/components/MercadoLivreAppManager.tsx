@@ -109,7 +109,8 @@ export default function MercadoLivreAppManager({
       }
 
       console.log('[MercadoLivre] Iniciando fetch para app-details...');
-      const response = await fetch('http://localhost:3001/api/integrations/mercado-livre/app-details', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${apiUrl}/integrations/mercado-livre/app-details`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,

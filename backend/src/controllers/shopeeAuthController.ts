@@ -57,7 +57,7 @@ export const handleShopeeCallback = async (req: Request, res: Response) => {
     console.log(`[ShopeeAuthController] Successfully authorized shop ${shop_id}`);
 
     // Redirecionar para admin panel com mensagem de sucesso
-    const redirectUrl = `http://localhost:3000/admin/integrations?shopee=connected&shop_id=${shop_id}`;
+    const redirectUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/admin/integrations?shopee=connected&shop_id=${shop_id}`;
     res.redirect(redirectUrl);
   } catch (error) {
     console.error('[ShopeeAuthController] Error handling callback:', error);

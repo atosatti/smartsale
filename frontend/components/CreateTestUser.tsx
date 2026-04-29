@@ -39,7 +39,8 @@ export default function CreateTestUser({ isDarkMode = false }: CreateTestUserPro
         }
 
         console.log('[CreateTestUser] Buscando test-user-info...');
-        const response = await fetch('http://localhost:3001/api/oauth/mercado-livre/test-user-info', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${apiUrl}/oauth/mercado-livre/test-user-info`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -87,7 +88,8 @@ export default function CreateTestUser({ isDarkMode = false }: CreateTestUserPro
         throw new Error('Token de autenticação não encontrado. Faça login novamente.');
       }
 
-      const response = await fetch('http://localhost:3001/api/oauth/mercado-livre/create-test-user', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${apiUrl}/oauth/mercado-livre/create-test-user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +133,8 @@ export default function CreateTestUser({ isDarkMode = false }: CreateTestUserPro
         throw new Error('Token de autenticação não encontrado. Faça login novamente.');
       }
 
-      const response = await fetch('http://localhost:3001/api/oauth/mercado-livre/authenticate-test-user', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const response = await fetch(`${apiUrl}/oauth/mercado-livre/authenticate-test-user`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

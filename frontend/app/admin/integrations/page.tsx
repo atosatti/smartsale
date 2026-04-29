@@ -151,10 +151,8 @@ export default function IntegrationPage() {
   };
 
   const handleConnectMercadoLivre = () => {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 
-      (typeof window !== 'undefined' 
-        ? `${window.location.protocol}//${window.location.host}`
-        : 'http://localhost:3001');
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || apiUrl.replace(/\/api\/?$/, '');
     
     console.log('[Integration] Redirecionando para OAuth com backend:', backendUrl);
     window.location.href = `${backendUrl}/api/oauth/mercado-livre/authorize`;

@@ -16,11 +16,11 @@ export default function MercadoLivreConnect() {
     try {
       // Construir URL do backend corretamente
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      const backendUrl = apiUrl.startsWith('http') 
-        ? apiUrl.replace('/api', '') 
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || (apiUrl.startsWith('http') 
+        ? apiUrl.replace(/\/api\/?$/, '') 
         : typeof window !== 'undefined' 
           ? `${window.location.protocol}//${window.location.host}`
-          : 'http://localhost:3001';
+          : 'http://localhost:3001');
       
       const response = await fetch(`${backendUrl}/api/oauth/mercado-livre/status`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -64,11 +64,11 @@ export default function MercadoLivreConnect() {
   const handleConnect = () => {
     // Construir URL do backend corretamente
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-    const backendUrl = apiUrl.startsWith('http') 
-      ? apiUrl.replace('/api', '') 
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || (apiUrl.startsWith('http') 
+      ? apiUrl.replace(/\/api\/?$/, '') 
       : typeof window !== 'undefined' 
         ? `${window.location.protocol}//${window.location.host}`
-        : 'http://localhost:3001';
+        : 'http://localhost:3001');
     
     console.log('[OAuth Debug] Backend URL:', backendUrl);
     console.log('[OAuth Debug] Redirecting to:', `${backendUrl}/api/oauth/mercado-livre/authorize`);
@@ -80,11 +80,11 @@ export default function MercadoLivreConnect() {
     try {
       // Construir URL do backend corretamente
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api';
-      const backendUrl = apiUrl.startsWith('http') 
-        ? apiUrl.replace('/api', '') 
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || (apiUrl.startsWith('http') 
+        ? apiUrl.replace(/\/api\/?$/, '') 
         : typeof window !== 'undefined' 
           ? `${window.location.protocol}//${window.location.host}`
-          : 'http://localhost:3001';
+          : 'http://localhost:3001');
       
       const response = await fetch(`${backendUrl}/api/oauth/mercado-livre/disconnect`, {
         method: 'POST',

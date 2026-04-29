@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000';
+// Derive backend base URL from API_URL when NEXT_PUBLIC_BACKEND_URL is not explicitly set
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || API_URL.replace(/\/api\/?$/, '');
 
 console.log('API_URL:', API_URL);
 console.log('BACKEND_URL:', BACKEND_URL);

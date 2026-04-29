@@ -45,7 +45,8 @@ export default function AdminLayout({
       console.log('[AdminLayout] Token encontrado, carregando dados do usuário...');
       const loadUser = async () => {
         try {
-          const response = await fetch('http://localhost:3001/api/auth/me', {
+          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+          const response = await fetch(`${apiUrl}/auth/me`, {
             headers: {
               'Authorization': `Bearer ${storedToken}`
             }
